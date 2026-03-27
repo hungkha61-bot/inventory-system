@@ -76,8 +76,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // Admin-only register
-//app.post("/api/register", authMiddleware, async (req, res) => {
-  app.post("/api/register", async (req, res) => {
+app.post("/api/register", authMiddleware, async (req, res) => {
   if (req.user.role !== "admin") return res.status(403).send("Not authorized");
 
   const { username, email, password, role } = req.body;
