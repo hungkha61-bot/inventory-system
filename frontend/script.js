@@ -1,5 +1,9 @@
 // script.js
-const API = "http://localhost:4000/api";
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("registerSection").style.display = "block";
+});
+const API = "https://inventory-system-syzl.onrender.com/api";
 let token = null;
 let role = null;
 let email = null;
@@ -44,7 +48,7 @@ const pageInfo = document.getElementById("pageInfo");
 
 addBtn.disabled = true;
 logoutBtn.style.display = "none";
-registerSection.style.display = "none";
+//registerSection.style.display = "none";
 
 // ------------------- LOGIN -------------------
 
@@ -93,7 +97,7 @@ loginForm.addEventListener("submit", async (e) => {
     addBtn.disabled = false;
 
     // Show register section only for admin
-    registerSection.style.display = role === "admin" ? "block" : "none";
+    //registerSection.style.display = role === "admin" ? "block" : "none";
 
     loadItemsPaginated(1);
     loadStats();
@@ -141,7 +145,7 @@ logoutBtn.addEventListener("click", () => {
   itemQty.value = "";
   logoutBtn.style.display = "none";
   addBtn.disabled = true;
-  registerSection.style.display = "none";
+  //registerSection.style.display = "none";
   addBtn.textContent = "Add";
   alert("Logged out successfully!");
 });
