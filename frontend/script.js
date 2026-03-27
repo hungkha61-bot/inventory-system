@@ -1,13 +1,20 @@
 // script.js
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("registerSection").style.display = "block";
-});
 const API = "https://inventory-system-syzl.onrender.com/api";
 let token = null;
 let role = null;
 let email = null;
 let currentEditId = null;
+
+token = localStorage.getItem("token");
+role = localStorage.getItem("role");
+document.addEventListener("DOMContentLoaded", () => {
+  if (role === "admin") {
+    registerSection.style.display = "block";
+  } else {
+    registerSection.style.display = "none";
+  }
+});
 
 // DOM elements
 const loginForm = document.getElementById("loginForm");
@@ -48,7 +55,7 @@ const pageInfo = document.getElementById("pageInfo");
 
 addBtn.disabled = true;
 logoutBtn.style.display = "none";
-//registerSection.style.display = "none";
+registerSection.style.display = "none";
 
 // ------------------- LOGIN -------------------
 
@@ -86,6 +93,12 @@ loginForm.addEventListener("submit", async (e) => {
     token = data.token;
     role = data.role;
 
+    if (role === "admin") {
+      registerSection.style.display = "block";
+    } else {
+      registerSection.style.display = "none";
+    }
+
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
 
@@ -97,7 +110,7 @@ loginForm.addEventListener("submit", async (e) => {
     addBtn.disabled = false;
 
     // Show register section only for admin
-    //registerSection.style.display = role === "admin" ? "block" : "none";
+    registerSection.style.display = role === "admin" ? "block" : "none";
 
     loadItemsPaginated(1);
     loadStats();
@@ -145,7 +158,7 @@ logoutBtn.addEventListener("click", () => {
   itemQty.value = "";
   logoutBtn.style.display = "none";
   addBtn.disabled = true;
-  //registerSection.style.display = "none";
+  registerSection.style.display = "none";
   addBtn.textContent = "Add";
   alert("Logged out successfully!");
 });
