@@ -99,6 +99,14 @@
   background: #ffe5e5;
   border: 1px solid #ffb3b3;
 }
+
+#formRow input {
+  padding: 6px;
+}
+
+#formRow button {
+  padding: 6px 10px;
+}
 </style>
 
 </head>
@@ -127,16 +135,21 @@
 
 <h2>Add / Edit Item</h2>
 
-<input type="text" id="itemInput" placeholder="Item name" required />
-<input type="number" id="itemPrice" placeholder="Price" required min="0" step="0.01" />
-<input type="number" id="itemQty" placeholder="Quantity" required min="0" step="1" />
+<div id="formRow" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
 
-<!-- Upload -->
-<label>Image:</label>
-<input type="file" id="itemImage" accept="image/*" />
-<img id="previewImage" style="display:none; width:40px; margin-top:10px; border-radius:8px;" />
+  <input type="text" id="itemInput" placeholder="Item name" required />
+  <input type="number" id="itemPrice" placeholder="Price" />
+  <input type="number" id="itemQty" placeholder="Quantity" />
 
-<button id="addBtn" type="button">Add</button>
+  <input type="file" id="itemImage" accept="image/*" />
+
+  <!-- Preview -->
+  <img id="previewImage" 
+       style="display:none; width:60px; height:60px; border-radius:6px; object-fit:cover;" />
+
+  <button id="addBtn" type="button">Add</button>
+
+</div>
 
 <ul id="itemList"></ul>
 
