@@ -316,6 +316,19 @@ app.get("/api/items/export", authMiddleware, async (req, res) => {
   }
 });
 
+// PUBLIC SITE
+
+app.get("/api/public/items", async (req, res) => {
+  try {
+    const items = await Item.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+
 // ------------------- START SERVER -------------------
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
