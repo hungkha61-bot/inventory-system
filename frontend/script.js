@@ -177,34 +177,48 @@ function renderItems(items) {
   items.forEach(item => {
     const li = document.createElement("li");
 
+    // 🔥 FLEX CONTAINER
+    li.style.display = "flex";
+    li.style.alignItems = "center";
+    li.style.justifyContent = "space-between";
+    li.style.border = "1px solid #ddd";
+    li.style.padding = "10px";
+    li.style.marginBottom = "10px";
+
+    // LEFT
     const left = document.createElement("div");
+    left.style.display = "flex";
+    left.style.alignItems = "center";
+    left.style.gap = "10px";
 
     if (item.image) {
       const img = document.createElement("img");
       img.src = `${BASE_URL}${item.image}`;
       img.style.width = "60px";
       img.style.height = "60px";
-      img.style.marginRight = "10px";
+      img.style.borderRadius = "6px";
       left.appendChild(img);
     }
 
-    left.innerHTML += `${item.name} - ${item.price} - ${item.quantity}`;
+    const info = document.createElement("div");
+    info.innerHTML = `
+      <strong>${item.name}</strong><br>
+      💰 ${item.price} | 📦 ${item.quantity}
+    `;
+    left.appendChild(info);
 
+    // RIGHT (buttons)
     const right = document.createElement("div");
+    right.style.display = "flex";
+    right.style.gap = "5px";
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
     editBtn.onclick = () => populateEditForm(item);
-    editBtn.style.cursor = "pointer";
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "Delete";
     delBtn.onclick = () => deleteItem(item._id);
-    delBtn.style.cursor = "pointer";
-
-    right.style.display = "flex";
-    right.style.gap = "5px";   
-    right.style.marginLeft = "auto";
 
     right.appendChild(editBtn);
     right.appendChild(delBtn);
