@@ -1,7 +1,6 @@
 // server.js
 const multer = require("multer");
-const upload = multer({ storage });
-const path = require("path");
+//const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -103,6 +102,9 @@ const storage = new CloudinaryStorage({
     allowed_formats: ["jpg", "png", "jpeg"]
   }
 });
+
+const upload = multer({ storage });
+
 
 app.post("/api/items", authMiddleware, upload.single("image"), async (req, res) => {
   console.log("BODY:", req.body);
