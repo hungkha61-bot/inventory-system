@@ -145,6 +145,23 @@ async function loadStats() {
 // ------------------- LOAD ITEMS -------------------
 async function loadItemsPaginated(page = 1) {
   
+const paramsObj = {
+  name: searchName.value.trim(),
+  createdBy: searchByUser.value.trim(),
+  sortBy: sortBy.value,
+  order: sortOrder.value,
+  page,
+  limit
+};
+
+// ✅ Only add if valid
+if (searchMinPrice.value !== "") paramsObj.minPrice = searchMinPrice.value;
+if (searchMaxPrice.value !== "") paramsObj.maxPrice = searchMaxPrice.value;
+if (searchMinQty.value !== "") paramsObj.minQty = searchMinQty.value;
+if (searchMaxQty.value !== "") paramsObj.maxQty = searchMaxQty.value;
+
+const params = new URLSearchParams(paramsObj);
+
   if (!token) return;
   itemList.innerHTML = "<p style='text-align:center;color:gray;'>⏳ Loading items...</p>";
   try {
@@ -323,6 +340,11 @@ searchMinPrice.addEventListener("input", triggerSearch);
 searchMaxPrice.addEventListener("input", triggerSearch);
 searchMinQty.addEventListener("input", triggerSearch);
 searchMaxQty.addEventListener("input", triggerSearch);
+
+searchMinPrice.addEventListener("change", triggerSearch);
+searchMaxPrice.addEventListener("change", triggerSearch);
+searchMinQty.addEventListener("change", triggerSearch);
+searchMaxQty.addEventListener("change", triggerSearch);
 
 //Image preview
 const imageInput = document.getElementById("itemImage");
