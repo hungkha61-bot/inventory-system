@@ -22,6 +22,85 @@
     button:hover {
       background: #2980b9;
     }
+
+    <style>
+/* CARD */
+.item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.item-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+/* LEFT */
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-left img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* INFO */
+.item-info strong {
+  font-size: 16px;
+}
+
+.item-info small {
+  color: gray;
+}
+
+/* RIGHT BUTTONS */
+.item-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* BUTTON STYLE */
+.btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* COLORS */
+.btn-edit {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+/* LOW STOCK */
+.low-stock {
+  background: #ffe5e5;
+  border: 1px solid #ffb3b3;
+}
+</style>
   </style>
 </head>
 <body>

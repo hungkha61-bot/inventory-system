@@ -177,47 +177,46 @@ function renderItems(items) {
   items.forEach(item => {
     const li = document.createElement("li");
 
-    // 🔥 FLEX CONTAINER
-    li.style.display = "flex";
-    li.style.alignItems = "center";
-    li.style.justifyContent = "space-between";
-    li.style.border = "1px solid #ddd";
-    li.style.padding = "10px";
-    li.style.marginBottom = "10px";
+    // CARD
+    li.className = "item-card";
+
+    if (item.quantity < 5) {
+      li.classList.add("low-stock");
+    }
 
     // LEFT
     const left = document.createElement("div");
-    left.style.display = "flex";
-    left.style.alignItems = "center";
-    left.style.gap = "10px";
+    left.className = "item-left";
 
     if (item.image) {
       const img = document.createElement("img");
       img.src = `${BASE_URL}${item.image}`;
-      img.style.width = "60px";
-      img.style.height = "60px";
-      img.style.borderRadius = "6px";
       left.appendChild(img);
     }
 
     const info = document.createElement("div");
+    info.className = "item-info";
+
     info.innerHTML = `
       <strong>${item.name}</strong><br>
-      💰 ${item.price} | 📦 ${item.quantity}
+      <small>💰 ${item.price} | 📦 ${item.quantity}</small><br>
+      <small>👤 ${item.createdBy}</small>
     `;
+
     left.appendChild(info);
 
-    // RIGHT (buttons)
+    // RIGHT
     const right = document.createElement("div");
-    right.style.display = "flex";
-    right.style.gap = "5px";
+    right.className = "item-actions";
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
+    editBtn.className = "btn btn-edit";
     editBtn.onclick = () => populateEditForm(item);
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "Delete";
+    delBtn.className = "btn btn-delete";
     delBtn.onclick = () => deleteItem(item._id);
 
     right.appendChild(editBtn);
