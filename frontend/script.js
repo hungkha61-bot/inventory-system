@@ -144,48 +144,50 @@ async function loadStats() {
 
 // ------------------- LOAD ITEMS -------------------
 async function loadItemsPaginated(page = 1) {
-  
-const paramsObj = {
-  name: searchName.value.trim(),
-  createdBy: searchByUser.value.trim(),
-  sortBy: sortBy.value,
-  order: sortOrder.value,
-  page,
-  limit
-};
-
-// ✅ Only add if valid
-if (searchMinPrice.value !== "") paramsObj.minPrice = searchMinPrice.value;
-if (searchMaxPrice.value !== "") paramsObj.maxPrice = searchMaxPrice.value;
-if (searchMinQty.value !== "") paramsObj.minQty = searchMinQty.value;
-if (searchMaxQty.value !== "") paramsObj.maxQty = searchMaxQty.value;
-
-const params = new URLSearchParams(paramsObj);
-
   if (!token) return;
+
   itemList.innerHTML = "<p style='text-align:center;color:gray;'>⏳ Loading items...</p>";
+
   try {
-    const params = new URLSearchParams({
-      name: searchName.value,
+    const paramsObj = {
+      name: searchName.value.trim(),
+      createdBy: searchByUser.value.trim(),
+      sortBy: sortBy.value,
+      order: sortOrder.value,
       page,
       limit
-    });
+    };
 
-    const res = await fetch(`${API}/items/paginated?${params}`, {
+    // ✅ only add valid filters
+    if (searchMinPrice.value !== "") paramsObj.minPrice = searchMinPrice.value;
+    if (searchMaxPrice.value !== "") paramsObj.maxPrice = searchMaxPrice.value;
+    if (searchMinQty.value !== "") paramsObj.minQty = searchMinQty.value;
+    if (searchMaxQty.value !== "") paramsObj.maxQty = searchMaxQty.value;
+
+    const params = new URLSearchParams(paramsObj);
+
+    // 🔥 DEBUG (you can remove later)
+    console.log("QUERY:", params.toString());
+
+    const res = await fetch(`${API}/items/paginated?${params.toString()}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
+    if (!res.ok) throw new Error(await res.text());
+
     const data = await res.json();
-    renderItems(data.items);
+
+    console.log("DATA:", data);
+
+    renderItems(data.items || []);
 
     currentPage = data.page;
     pageInfo.textContent = `Page ${data.page} of ${data.totalPages}`;
 
   } catch (err) {
-    console.error(err);
+    console.error("LOAD ERROR:", err);
   }
 }
-
 // ------------------- RENDER -------------------
 function renderItems(items) {
   if (!items.length) {
