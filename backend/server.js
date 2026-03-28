@@ -1,6 +1,6 @@
 // server.js
-const fs = require("fs");
 const multer = require("multer");
+const upload = multer({ storage });
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -15,7 +15,6 @@ app.use(cors({
   origin: "*"
 }));
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
 
 // ------------------- MongoDB Connection -------------------
 mongoose.connect(process.env.MONGO_URI, {
@@ -94,17 +93,16 @@ app.post("/api/register", authMiddleware, async (req, res) => {
 
 // Create item
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("./config/cloudinary");
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "inventory",
+    allowed_formats: ["jpg", "png", "jpeg"]
   }
 });
-
-const upload = multer({ storage });
 
 app.post("/api/items", authMiddleware, upload.single("image"), async (req, res) => {
   console.log("BODY:", req.body);
@@ -118,7 +116,7 @@ app.post("/api/items", authMiddleware, upload.single("image"), async (req, res) 
       price,
       quantity,
       createdBy: req.user.email.trim().toLowerCase(),
-      image: req.file ? `/uploads/${req.file.filename}` : null   // ⭐ THIS LINE IS THE KEY
+      image: req.file ? req.file.path : null
     });
 
     await newItem.save();
@@ -144,7 +142,7 @@ app.put("/api/items/:id", authMiddleware, upload.single("image"), async (req, re
     };
 
     if (req.file) {
-      updateData.image = `/uploads/${req.file.filename}`;
+      updateData.image = req.file.path;
     }
 
     const item = await Item.findById(req.params.id);
@@ -183,20 +181,7 @@ app.delete("/api/items/:id", authMiddleware, async (req, res) => {
       return res.status(403).json({ message: "Not authorized" });
     }
 
-    // ⭐ DELETE IMAGE FILE FIRST
-   if (item.image) {
-      const imagePath = path.join(__dirname, item.image);
-
-      fs.unlink(imagePath, (err) => {
-        if (err) {
-          console.error("❌ Image delete error:", err.message);
-        } else {
-          console.log("🗑 Image deleted:", imagePath);
-        }
-      });
-    }
-
-    // ⭐ DELETE ITEM FROM DB
+   // ⭐ DELETE ITEM FROM DB
     await Item.findByIdAndDelete(id);
 
     res.json({ message: "Item and image deleted" });
