@@ -1,34 +1,45 @@
 const API = "https://inventory-system-syzl.onrender.com/api";
 
+let allItems = [];
+
 async function loadProducts() {
-  try {
-    const res = await fetch(`${API}/public/items`);
-    const items = await res.json();
+  const res = await fetch(`${API}/public/items`);
+  allItems = await res.json();
+  renderProducts(allItems);
+}
 
-    const container = document.getElementById("productList");
-    container.innerHTML = "";
+function renderProducts(items) {
+  const container = document.getElementById("productList");
+  container.innerHTML = "";
 
-    items.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "card";
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "card";
 
-      div.innerHTML = `
-        <img src="https://inventory-system-syzl.onrender.com${item.image}" />
-        <h3>${item.name}</h3>
-        <p class="price">$${item.price}</p>
-        <button onclick="viewDetail('${item._id}')">View</button>
-      `;
+    div.innerHTML = `
+      <img src="https://inventory-system-syzl.onrender.com${item.image}" />
+      <h3>${item.name}</h3>
+      <p class="price">$${item.price}</p>
+      <button onclick="viewDetail('${item._id}')">View</button>
+    `;
 
-      container.appendChild(div);
-    });
-
-  } catch (err) {
-    console.error(err);
-  }
+    container.appendChild(div);
+  });
 }
 
 function viewDetail(id) {
   window.location.href = `product.html?id=${id}`;
 }
+
+// 🔍 SEARCH
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const keyword = e.target.value.toLowerCase();
+
+  const filtered = allItems.filter(item =>
+    item.name.toLowerCase().includes(keyword)
+  );
+
+  renderProducts(filtered);
+});
 
 loadProducts();
