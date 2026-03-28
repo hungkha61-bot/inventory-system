@@ -144,10 +144,12 @@ async function loadStats() {
 
 // ------------------- LOAD ITEMS -------------------
 async function loadItemsPaginated(page = 1) {
+  if (!items.length) {
+    itemList.innerHTML = "<p style='text-align:center;color:gray;'>No items found 😢</p>";
+    return;
+  }
   if (!token) return;
-
-  itemList.innerHTML = "<p>Loading...</p>";
-
+  itemList.innerHTML = "<p style='text-align:center;color:gray;'>⏳ Loading items...</p>";
   try {
     const params = new URLSearchParams({
       name: searchName.value,
@@ -301,4 +303,37 @@ regBtn.addEventListener("click", async () => {
   });
 
   if (res.ok) alert("User created!");
+});
+
+let searchTimeout;
+
+function triggerSearch() {
+  clearTimeout(searchTimeout);
+
+  searchTimeout = setTimeout(() => {
+    loadItemsPaginated(1);
+  }, 400); // delay to avoid spam API
+}
+
+// Attach to inputs
+searchName.addEventListener("input", triggerSearch);
+searchByUser.addEventListener("input", triggerSearch);
+searchMinPrice.addEventListener("input", triggerSearch);
+searchMaxPrice.addEventListener("input", triggerSearch);
+searchMinQty.addEventListener("input", triggerSearch);
+searchMaxQty.addEventListener("input", triggerSearch);
+
+//Image preview
+const imageInput = document.getElementById("itemImage");
+const previewImage = document.getElementById("previewImage");
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+
+  if (file) {
+    previewImage.src = URL.createObjectURL(file);
+    previewImage.style.display = "block";
+  } else {
+    previewImage.style.display = "none";
+  }
 });
