@@ -258,7 +258,7 @@ addBtn.addEventListener("click", async () => {
   if (!token) return alert("Login first!");
 
   const formData = new FormData();
-  formData.append("name", itemInput.value);
+  formData.append("name", itemInput.value.trim());
   formData.append("price", itemPrice.value);
   formData.append("quantity", itemQty.value);
 
@@ -273,17 +273,36 @@ addBtn.addEventListener("click", async () => {
     method = "PUT";
   }
 
-  await fetch(url, {
-    method,
-    headers: { Authorization: `Bearer ${token}` },
-    body: formData
-  });
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    });
 
-  currentEditId = null;
-  addBtn.textContent = "Add";
+    if (!res.ok) throw new Error(await res.text());
 
-  loadItemsPaginated(1);
-  loadStats();
+    // ✅ RESET FORM (THIS IS WHAT YOU NEED)
+    itemInput.value = "";
+    itemPrice.value = "";
+    itemQty.value = "";
+    document.getElementById("itemImage").value = "";
+
+    // hide preview if exists
+    if (previewImage) {
+      previewImage.style.display = "none";
+      previewImage.src = "";
+    }
+
+    currentEditId = null;
+    addBtn.textContent = "Add";
+
+    loadItemsPaginated(1);
+    loadStats();
+
+  } catch (err) {
+    console.error("Save error:", err);
+  }
 });
 
 // ------------------- DELETE -------------------
