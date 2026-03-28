@@ -183,6 +183,8 @@ async function loadItemsPaginated(page = 1) {
 
     currentPage = data.page;
     pageInfo.textContent = `Page ${data.page} of ${data.totalPages}`;
+    prevPageBtn.disabled = data.page <= 1;
+    nextPageBtn.disabled = data.page >= data.totalPages;
 
   } catch (err) {
     console.error("LOAD ERROR:", err);
@@ -361,4 +363,15 @@ imageInput.addEventListener("change", () => {
   } else {
     previewImage.style.display = "none";
   }
+});
+
+// ------------------- PAGINATION -------------------
+prevPageBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    loadItemsPaginated(currentPage - 1);
+  }
+});
+
+nextPageBtn.addEventListener("click", () => {
+  loadItemsPaginated(currentPage + 1);
 });
