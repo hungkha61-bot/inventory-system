@@ -144,10 +144,7 @@ async function loadStats() {
 
 // ------------------- LOAD ITEMS -------------------
 async function loadItemsPaginated(page = 1) {
-  if (!items.length) {
-    itemList.innerHTML = "<p style='text-align:center;color:gray;'>No items found 😢</p>";
-    return;
-  }
+  
   if (!token) return;
   itemList.innerHTML = "<p style='text-align:center;color:gray;'>⏳ Loading items...</p>";
   try {
@@ -174,6 +171,10 @@ async function loadItemsPaginated(page = 1) {
 
 // ------------------- RENDER -------------------
 function renderItems(items) {
+  if (!items.length) {
+    itemList.innerHTML = "<p style='text-align:center;color:gray;'>No items found 😢</p>";
+    return;
+  }
   itemList.innerHTML = "";
 
   items.forEach(item => {
