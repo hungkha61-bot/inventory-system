@@ -202,7 +202,6 @@ function renderItems(items) {
     delBtn.onclick = () => deleteItem(item._id);
     delBtn.style.cursor = "pointer";
 
-    const right = document.createElement("div");
     right.style.display = "flex";
     right.style.gap = "5px";   
     right.style.marginLeft = "auto";
