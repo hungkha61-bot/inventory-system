@@ -274,13 +274,22 @@ addBtn.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch(url, {
-      method,
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData
-    });
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: formData
+  });
 
-    if (!res.ok) throw new Error(await res.text());
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("SERVER ERROR:", text);   // 🔥 SHOW REAL ERROR
+    return alert("Error: " + text);
+  }
+
+  const data = await res.json();
+  console.log("SUCCESS:", data);
 
     // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
@@ -301,8 +310,8 @@ addBtn.addEventListener("click", async () => {
     loadStats();
 
   } catch (err) {
-    console.error("Save error:", err);
-  }
+  console.error("FETCH ERROR:", err);
+}
 });
 
 // ------------------- DELETE -------------------
