@@ -257,7 +257,7 @@ function renderItems(items) {
 
 addBtn.addEventListener("click", async () => {
 
-console.log("HEADERS:", req.headers);
+//console.log("HEADERS:", req.headers);
 console.log("BODY:", req.body);
 console.log("FILE:", req.file);
 
