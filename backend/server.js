@@ -98,19 +98,19 @@ const cloudinary = require("./config/cloudinary");
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
+  params: async (req, file) => ({
     folder: "inventory",
-    allowed_formats: ["jpg", "png", "jpeg"]
-  }
+    format: "jpg", // or let Cloudinary decide
+    public_id: Date.now() + "-" + file.originalname
+  })
 });
 
 const upload = multer({ storage });
 
 
-app.post("/api/items", authMiddleware, (req, res, next) => {
-  console.log("👉 REQUEST HIT BEFORE MULTER");
-  next();
-}, upload.single("image"), async (req, res) => {
+app.post("/api/items", authMiddleware, upload.single("image"), async (req, res) => {
+  console.log("BODY AFTER MULTER:", req.body);
+  console.log("FILE:", req.file);
 
   try {
     const { name, price, quantity } = req.body;
@@ -137,7 +137,7 @@ app.post("/api/items", authMiddleware, (req, res, next) => {
 // Update item
 app.put("/api/items/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { name, price, quantity } = req.body;
+    const { name, price, quantity } = req.body || {};
 
     const updateData = {
       name,
