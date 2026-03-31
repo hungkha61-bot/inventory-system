@@ -254,44 +254,45 @@ function renderItems(items) {
 }
 
 // ------------------- ADD / UPDATE -------------------
+
 addBtn.addEventListener("click", async () => {
   if (!token) return alert("Login first!");
 
   const formData = new FormData();
+
   formData.append("name", itemInput.value.trim());
   formData.append("price", itemPrice.value);
   formData.append("quantity", itemQty.value);
 
-  const image = document.getElementById("itemImage").files[0];
-  if (image) formData.append("image", image);
+  const imageInput = document.getElementById("itemImage");
+  const image = imageInput.files[0];
+
+  if (image) {
+    formData.append("image", image); 
+  }
 
   let url = `${API}/items`;
   let method = "POST";
 
-  if (currentEditId) {
-    url = `${API}/items/${currentEditId}`;
-    method = "PUT";
-  }
-
   try {
-  const res = await fetch(url, {
-    method,
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-    body: formData
-  });
+    const res = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("SERVER ERROR:", text);   // 🔥 SHOW REAL ERROR
-    return alert("Error: " + text);
-  }
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("SERVER ERROR:", text);
+      return alert("Error: " + text);
+    }
 
-  const data = await res.json();
-  console.log("SUCCESS:", data);
+    const data = await res.json();
+    console.log("SUCCESS:", data);
 
-    // ✅ RESET FORM (THIS IS WHAT YOU NEED)
+      // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
     itemPrice.value = "";
     itemQty.value = "";
