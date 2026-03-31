@@ -257,10 +257,6 @@ function renderItems(items) {
 
 addBtn.addEventListener("click", async () => {
 
-//console.log("HEADERS:", req.headers);
-console.log("BODY:", req.body);
-console.log("FILE:", req.file);
-
   if (!token) return alert("Login first!");
 
   const formData = new FormData();
