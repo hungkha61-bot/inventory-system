@@ -214,7 +214,7 @@ function renderItems(items) {
 
     if (item.image) {
       const img = document.createElement("img");
-      img.src = `${BASE_URL}${item.image}`;
+      img.src = item.image;
       left.appendChild(img);
     }
 
