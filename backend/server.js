@@ -108,24 +108,19 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 
-app.post("/api/items", authMiddleware, upload.single("image"), async (req, res) => {
-  console.log("BODY AFTER MULTER:", req.body);
-  console.log("FILE:", req.file);
-
+app.post("/api/items", authMiddleware, async (req, res) => {
   try {
-    const { name, price, quantity } = req.body;
+    const { name, price, quantity, image } = req.body;
 
     const newItem = new Item({
       name,
       price,
       quantity,
-      createdBy: req.user.email.trim().toLowerCase(),
-      image: req.file ? req.file.path : null
+      createdBy: req.user.email,
+      image: image || null
     });
 
     await newItem.save();
-
-    console.log("SAVED ITEM:", newItem); // 👈 add this too
 
     res.json(newItem);
 

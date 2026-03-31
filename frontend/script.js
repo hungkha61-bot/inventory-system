@@ -256,42 +256,53 @@ function renderItems(items) {
 // ------------------- ADD / UPDATE -------------------
 
 addBtn.addEventListener("click", async () => {
-
   if (!token) return alert("Login first!");
 
-  const formData = new FormData();
+  const name = itemInput.value.trim();
+  const price = itemPrice.value;
+  const quantity = itemQty.value;
 
-  formData.append("name", itemInput.value.trim());
-  formData.append("price", itemPrice.value);
-  formData.append("quantity", itemQty.value);
+  const imageFile = document.getElementById("itemImage").files[0];
 
-  const imageInput = document.getElementById("itemImage");
-  const image = imageInput.files[0];
+  let imageUrl = null;
 
-  if (image) {
-    formData.append("image", image); 
-  }
+  // 🔥 Upload to Cloudinary FIRST
+  if (imageFile) {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("upload_preset", "inventory_upload");
 
-  let url = `${API}/items`;
-  let method = "POST";
-
-  try {
-    const res = await fetch(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      body: formData
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("SERVER ERROR:", text);
-      return alert("Error: " + text);
-    }
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dm1n8bthw/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
 
     const data = await res.json();
-    console.log("SUCCESS:", data);
+    imageUrl = data.secure_url;
+
+    console.log("Cloudinary URL:", imageUrl);
+  }
+
+  // 🔥 Send to backend (NO multer anymore)
+  const res2 = await fetch(`${API}/items`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      name,
+      price,
+      quantity,
+      image: imageUrl
+    })
+  });
+
+  const result = await res2.json();
+  console.log(result);
 
       // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
@@ -311,9 +322,6 @@ addBtn.addEventListener("click", async () => {
     loadItemsPaginated(1);
     loadStats();
 
-  } catch (err) {
-  console.error("FETCH ERROR:", err);
-}
 });
 
 // ------------------- DELETE -------------------
