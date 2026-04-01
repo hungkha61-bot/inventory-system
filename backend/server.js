@@ -338,6 +338,20 @@ app.post("/api/orders", authMiddleware, async (req, res) => {
   }
 });
 
+// ----  GET USER ORDERS
+app.get("/api/orders/my", authMiddleware, async (req, res) => {
+  try {
+    const orders = await Order.find({
+      userEmail: req.user.email
+    }).sort({ createdAt: -1 });
+
+    res.json(orders);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // ------------------- START SERVER -------------------
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
