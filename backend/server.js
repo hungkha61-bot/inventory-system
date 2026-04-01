@@ -313,7 +313,7 @@ app.get("/api/public/items", async (req, res) => {
 
 // CHECKOUT API
 
-const Order = require("./models/Order");
+const Order = require("/models/Order");
 
 app.post("/api/orders", authMiddleware, async (req, res) => {
   try {
