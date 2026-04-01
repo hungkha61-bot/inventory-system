@@ -28,29 +28,27 @@ function renderProducts(items) {
     const img = document.createElement("img");
     img.src = item.image;
     img.addEventListener("click", () => {
-        console.log("GO TO:", item._id);
         window.location.href = `./product.html?id=${item._id}`;
     });
 
+    const name = document.createElement("h3");
+    name.textContent = item.name;
 
-const name = document.createElement("h3");
-name.textContent = item.name;
+    const price = document.createElement("p");
+    price.className = "price";
+    price.textContent = `$${item.price}`;
 
-const price = document.createElement("p");
-price.className = "price";
-price.textContent = `$${item.price}`;
+    const btn = document.createElement("button");
+    btn.textContent = "Add to Cart";
 
-const btn = document.createElement("button");
-btn.textContent = "Add to Cart";
+    btn.addEventListener("click", () => {
+    addToCart(item._id, item.name, item.price);
+    });
 
-btn.addEventListener("click", () => {
-  addToCart(item._id, item.name, item.price);
-});
-
-card.appendChild(img);
-card.appendChild(name);
-card.appendChild(price);
-card.appendChild(btn);
+    card.appendChild(img);
+    card.appendChild(name);
+    card.appendChild(price);
+    card.appendChild(btn);
 
     productGrid.appendChild(card);
   });
