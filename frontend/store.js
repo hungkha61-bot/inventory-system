@@ -25,8 +25,13 @@ function renderProducts(items) {
     const card = document.createElement("div");
     card.className = "card";
 
-   const img = document.createElement("img");
-img.src = item.image;
+    const img = document.createElement("img");
+    img.src = item.image;
+    img.addEventListener("click", () => {
+        console.log("GO TO:", item._id);
+        window.location.href = `./product.html?id=${item._id}`;
+    });
+
 
 const name = document.createElement("h3");
 name.textContent = item.name;
