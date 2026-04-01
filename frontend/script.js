@@ -191,7 +191,7 @@ async function loadItemsPaginated(page = 1) {
   }
 }
 // ------------------- RENDER -------------------
-function renderItems(items) {
+function renderProducts(items) {
   if (!items.length) {
     itemList.innerHTML = "<p style='text-align:center;color:gray;'>No items found 😢</p>";
     return;
