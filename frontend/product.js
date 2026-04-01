@@ -32,7 +32,7 @@ function render(p) {
     <h2>${p.name}</h2>
     <p><strong>Price:</strong> $${p.price}</p>
     <p><strong>Stock:</strong> ${p.quantity}</p>
-    <button onclick="addToCart('${p._id}','${p.name}', '${p.image}', ${p.price})">
+    <button onclick="addToCart('${p._id}','${p.name}', ${p.image}, ${p.price})">
       Add to Cart
     </button>
   `;
