@@ -218,9 +218,10 @@ function renderItems(items) {
 
       // 👉 CLICK EVENT HERE
       img.addEventListener("click", () => {
-        goToProduct(item._id);
-      });
-      
+      console.log("CLICKED", item._id);
+      goToProduct(item._id);
+    });
+
       card.appendChild(img);
     }
 
