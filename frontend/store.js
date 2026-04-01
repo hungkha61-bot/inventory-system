@@ -25,14 +25,15 @@ function renderProducts(items) {
     const card = document.createElement("div");
     card.className = "card";
 
-    card.innerHTML = `
-      <img src="${item.image || 'https://via.placeholder.com/200'}">
-      <h3>${item.name}</h3>
-      <p class="price">$${item.price}</p>
-      <button onclick="addToCart('${item._id}', '${item.name}', ${item.price})">
-        Add to Cart
-      </button>
-    `;
+   card.innerHTML = `
+  <img src="${item.image || 'https://via.placeholder.com/200'}"
+       onclick="goToProduct('${item._id}')">
+  <h3>${item.name}</h3>
+  <p class="price">$${item.price}</p>
+  <button onclick="addToCart('${item._id}', '${item.name}', ${item.price})">
+    Add to Cart
+  </button>
+`;
 
     productGrid.appendChild(card);
   });
@@ -60,6 +61,10 @@ function updateCartUI() {
 cartBtn.addEventListener("click", () => {
   window.location.href = "cart.html";
 });
+
+function goToProduct(id) {
+  window.location.href = `product.html?id=${id}`;
+}
 
 // ---------------- INIT ----------------
 updateCartUI();
