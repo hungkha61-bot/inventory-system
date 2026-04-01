@@ -39,7 +39,7 @@ function render(p) {
 }
 
 // reuse cart logic
-function addToCart(id, name, price) {
+function addToCart(id, name, price, image) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   const existing = cart.find(i => i.id === id);
@@ -47,7 +47,7 @@ function addToCart(id, name, price) {
   if (existing) {
     existing.qty++;
   } else {
-    cart.push({ id, name, price, qty: 1 });
+    cart.push({ id, name, price, image, qty: 1 });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
