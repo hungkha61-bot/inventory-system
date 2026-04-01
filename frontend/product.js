@@ -32,10 +32,17 @@ function render(p) {
     <h2>${p.name}</h2>
     <p><strong>Price:</strong> $${p.price}</p>
     <p><strong>Stock:</strong> ${p.quantity}</p>
-    <button onclick="addToCart('${p._id}','${p.name}', ${p.image}, ${p.price})">
-      Add to Cart
-    </button>
   `;
+
+    const btn = document.createElement("button");
+    btn.textContent = "Add to Cart";
+
+    btn.addEventListener("click", () => {
+      addToCart(p._id, p.name, p.price, p.image);
+    });
+
+    container.appendChild(btn);
+
 }
 
 // reuse cart logic
