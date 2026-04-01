@@ -1,45 +1,62 @@
 const API = "https://inventory-system-syzl.onrender.com/api";
 
-let allItems = [];
+const productGrid = document.getElementById("productGrid");
+const cartBtn = document.getElementById("cartBtn");
 
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// ---------------- LOAD PRODUCTS ----------------
 async function loadProducts() {
-  const res = await fetch(`${API}/public/items`);
-  allItems = await res.json();
-  renderProducts(allItems);
+  try {
+    const res = await fetch(`${API}/public/items`);
+    const data = await res.json();
+
+    renderProducts(data);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
+// ---------------- RENDER ----------------
 function renderProducts(items) {
-  const container = document.getElementById("productList");
-  container.innerHTML = "";
+  productGrid.innerHTML = "";
 
   items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "card";
+    const card = document.createElement("div");
+    card.className = "card";
 
-    div.innerHTML = `
-      <img src="https://inventory-system-syzl.onrender.com${item.image}" />
+    card.innerHTML = `
+      <img src="${item.image || 'https://via.placeholder.com/200'}">
       <h3>${item.name}</h3>
       <p class="price">$${item.price}</p>
-      <button onclick="viewDetail('${item._id}')">View</button>
+      <button onclick="addToCart('${item._id}', '${item.name}', ${item.price})">
+        Add to Cart
+      </button>
     `;
 
-    container.appendChild(div);
+    productGrid.appendChild(card);
   });
 }
 
-function viewDetail(id) {
-  window.location.href = `product.html?id=${id}`;
+// ---------------- CART ----------------
+function addToCart(id, name, price) {
+  const existing = cart.find(item => item.id === id);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id, name, price, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartUI();
 }
 
-// 🔍 SEARCH
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  const keyword = e.target.value.toLowerCase();
+function updateCartUI() {
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  cartBtn.textContent = `Cart (${totalQty})`;
+}
 
-  const filtered = allItems.filter(item =>
-    item.name.toLowerCase().includes(keyword)
-  );
-
-  renderProducts(filtered);
-});
-
+// ---------------- INIT ----------------
+updateCartUI();
 loadProducts();
