@@ -75,7 +75,7 @@ cartBtn.addEventListener("click", () => {
 });
 
 function goToProduct(id) {
-  window.location.href = `/product.html?id=${id}`;
+  window.location.href = `./product.html?id=${id}`;
 }
 
 window.addToCart = addToCart;
