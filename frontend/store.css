@@ -55,3 +55,9 @@ button {
 button:hover {
   background: #444;
 }
+
+img {
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+}
