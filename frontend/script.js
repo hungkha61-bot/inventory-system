@@ -222,7 +222,7 @@ function renderItems(items) {
       window.location.href = `./product.html?id=${item._id}`;
     });
 
-      card.appendChild(img);
+      left.appendChild(img);
     }
 
     const info = document.createElement("div");
