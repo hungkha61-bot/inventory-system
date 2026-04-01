@@ -56,7 +56,7 @@ button:hover {
   background: #444;
 }
 
-img {
+.item-left img {
   cursor: pointer;
   position: relative;
   z-index: 10;
