@@ -18,20 +18,33 @@ function renderCart() {
   cart.forEach(item => {
     total += item.price * item.qty;
 
-    const div = document.createElement("div");
-    div.className = "card";
+    const row = document.createElement("div");
+    row.className = "cart-row";
 
-    div.innerHTML = `
-      <h3>${item.name}</h3>
-      <p>Price: $${item.price}</p>
-      <p>Qty: ${item.qty}</p>
+    row.innerHTML = `
+      <img src="${item.image || 'https://via.placeholder.com/80'}">
 
-      <button onclick="increaseQty('${item.id}')">+</button>
-      <button onclick="decreaseQty('${item.id}')">-</button>
-      <button onclick="removeItem('${item.id}')">Remove</button>
+      <div class="cart-info">
+        <h3>${item.name}</h3>
+        <p>$${item.price}</p>
+      </div>
+
+      <div class="cart-qty">
+        <button onclick="decreaseQty('${item.id}')">-</button>
+        <span>${item.qty}</span>
+        <button onclick="increaseQty('${item.id}')">+</button>
+      </div>
+
+      <div class="cart-total">
+        $${item.price * item.qty}
+      </div>
+
+      <button class="remove-btn" onclick="removeItem('${item.id}')">
+        ✕
+      </button>
     `;
 
-    cartContainer.appendChild(div);
+    cartContainer.appendChild(row);
   });
 
   totalPriceEl.textContent = `Total: $${total}`;

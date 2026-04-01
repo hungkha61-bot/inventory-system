@@ -84,3 +84,41 @@ body {
   background: #333;
 }
 
+/* CART */
+.cart-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 100px 40px;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.cart-row img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-info h3 {
+  margin: 0;
+}
+
+.cart-qty button {
+  padding: 5px 10px;
+  margin: 0 5px;
+}
+
+.cart-total {
+  font-weight: bold;
+}
+
+.remove-btn {
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
