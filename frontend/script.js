@@ -217,9 +217,9 @@ function renderItems(items) {
       img.src = item.image || "https://via.placeholder.com/200";
 
       // 👉 CLICK EVENT HERE
-      img.addEventListener("click", () => {
-      console.log("CLICKED", item._id);
-      goToProduct(item._id);
+     img.addEventListener("click", () => {
+      console.log("GO TO:", item._id);
+      window.location.href = `./product.html?id=${item._id}`;
     });
 
       card.appendChild(img);
