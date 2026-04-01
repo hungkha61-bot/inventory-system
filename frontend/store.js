@@ -25,15 +25,27 @@ function renderProducts(items) {
     const card = document.createElement("div");
     card.className = "card";
 
-   card.innerHTML = `
-  <img src="${item.image || 'https://via.placeholder.com/200'}"
-       onclick="goToProduct('${item._id}')">
-  <h3>${item.name}</h3>
-  <p class="price">$${item.price}</p>
-  <button onclick="addToCart('${item._id}', '${item.name}', ${item.price})">
-    Add to Cart
-  </button>
-`;
+   const img = document.createElement("img");
+img.src = item.image;
+
+const name = document.createElement("h3");
+name.textContent = item.name;
+
+const price = document.createElement("p");
+price.className = "price";
+price.textContent = `$${item.price}`;
+
+const btn = document.createElement("button");
+btn.textContent = "Add to Cart";
+
+btn.addEventListener("click", () => {
+  addToCart(item._id, item.name, item.price);
+});
+
+card.appendChild(img);
+card.appendChild(name);
+card.appendChild(price);
+card.appendChild(btn);
 
     productGrid.appendChild(card);
   });
@@ -65,6 +77,8 @@ cartBtn.addEventListener("click", () => {
 function goToProduct(id) {
   window.location.href = `product.html?id=${id}`;
 }
+
+window.addToCart = addToCart;
 
 // ---------------- INIT ----------------
 updateCartUI();

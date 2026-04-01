@@ -214,8 +214,14 @@ function renderItems(items) {
 
     if (item.image) {
       const img = document.createElement("img");
-      img.src = item.image;
-      left.appendChild(img);
+      img.src = item.image || "https://via.placeholder.com/200";
+
+      // 👉 CLICK EVENT HERE
+      img.addEventListener("click", () => {
+        goToProduct(item._id);
+      });
+      
+      card.appendChild(img);
     }
 
     const info = document.createElement("div");
