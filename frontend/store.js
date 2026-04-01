@@ -57,6 +57,10 @@ function updateCartUI() {
   cartBtn.textContent = `Cart (${totalQty})`;
 }
 
+cartBtn.addEventListener("click", () => {
+  window.location.href = "cart.html";
+});
+
 // ---------------- INIT ----------------
 updateCartUI();
 loadProducts();

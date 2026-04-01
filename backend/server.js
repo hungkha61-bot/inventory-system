@@ -311,7 +311,32 @@ app.get("/api/public/items", async (req, res) => {
   }
 });
 
+// CHECKOUT API
 
+const Order = require("./models/Order");
+
+app.post("/api/orders", authMiddleware, async (req, res) => {
+  try {
+    const { items, total } = req.body;
+
+    if (!items || items.length === 0) {
+      return res.status(400).json({ message: "Cart is empty" });
+    }
+
+    const order = new Order({
+      userEmail: req.user.email,
+      items,
+      total
+    });
+
+    await order.save();
+
+    res.json({ message: "Order placed!", order });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // ------------------- START SERVER -------------------
 const PORT = process.env.PORT || 4000;
