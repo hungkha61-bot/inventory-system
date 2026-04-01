@@ -216,7 +216,7 @@ function renderProducts(items) {
   const img = document.createElement("img");
   img.src = item.image || "https://via.placeholder.com/200";
 
-  img.addEventListener("click", () => {
+  left.addEventListener("click", () => {
     console.log("GO TO:", item._id);
     window.location.href = `./product.html?id=${item._id}`;
   });
