@@ -315,38 +315,49 @@ app.get("/api/public/items", async (req, res) => {
 
 const Order = require("./models/Order");
 
-app.post("/api/orders", authMiddleware, async (req, res) => {
+// =====================
+// CREATE ORDER
+// =====================
+app.post("/api/orders", async (req, res) => {
   try {
-    const { items, total } = req.body;
+    console.log("ORDER BODY:", req.body);
+
+    const { items } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ message: "Cart is empty" });
     }
 
-    const order = new Order({
-      userEmail: req.user.email,
+    // calculate total
+    const total = items.reduce((sum, item) => {
+      return sum + item.price * item.qty;
+    }, 0);
+
+    const newOrder = new Order({
       items,
       total
     });
 
-    await order.save();
+    await newOrder.save();
 
-    res.json({ message: "Order placed!", order });
+    res.json({
+      message: "Order created successfully 🎉",
+      order: newOrder
+    });
 
   } catch (err) {
+    console.error("ORDER ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 });
 
-// ----  GET USER ORDERS
-app.get("/api/orders/my", authMiddleware, async (req, res) => {
+// =====================
+// GET ALL ORDERS
+// =====================
+app.get("/api/orders", async (req, res) => {
   try {
-    const orders = await Order.find({
-      userEmail: req.user.email
-    }).sort({ createdAt: -1 });
-
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

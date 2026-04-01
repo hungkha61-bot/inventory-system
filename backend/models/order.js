@@ -1,12 +1,12 @@
-// models/Order.js
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-  userEmail: String,
   items: [
     {
+      id: String,
       name: String,
       price: Number,
+      image: String,
       qty: Number
     }
   ],
