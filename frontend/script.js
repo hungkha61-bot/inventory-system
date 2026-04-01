@@ -213,17 +213,16 @@ function renderItems(items) {
     left.className = "item-left";
 
     if (item.image) {
-      const img = document.createElement("img");
-      img.src = item.image || "https://via.placeholder.com/200";
+  const img = document.createElement("img");
+  img.src = item.image || "https://via.placeholder.com/200";
 
-      // 👉 CLICK EVENT HERE
-     img.addEventListener("click", () => {
-      console.log("GO TO:", item._id);
-      window.location.href = `./product.html?id=${item._id}`;
-    });
+  img.addEventListener("click", () => {
+    console.log("GO TO:", item._id);
+    window.location.href = `./product.html?id=${item._id}`;
+  });
 
-      left.appendChild(img);
-    }
+  left.appendChild(img);
+}
 
     const info = document.createElement("div");
     info.className = "item-info";
