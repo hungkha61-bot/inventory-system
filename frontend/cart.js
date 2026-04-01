@@ -92,24 +92,24 @@ document.getElementById("checkoutBtn").addEventListener("click", async () => {
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   try {
-    const res = await fetch(`${API}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        items: cart,
-        total
-      })
-    });
+const res = await fetch("https://inventory-system-syzl.onrender.com/api/orders", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ items: cart })
+});
 
-    const data = await res.json();
+const text = await res.text();
+console.log("SERVER RESPONSE:", text);
 
-    if (!res.ok) throw new Error(data.message);
+if (!res.ok) {
+  alert("Order failed: " + text);
+  return;
+}
 
-    alert("✅ Order placed!");
-
+const data = JSON.parse(text);
+alert("Order placed!");
     // 🔥 clear cart
     cart = [];
     localStorage.removeItem("cart");
