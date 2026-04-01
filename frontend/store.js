@@ -47,7 +47,7 @@ function renderProducts(items) {
     btn.textContent = "Add to Cart";
 
     btn.addEventListener("click", () => {
-      addToCart(item._id, item.name, item.price);
+      addToCart(item._id, item.name, item.price, item.image);
 
       // 🔥 UX FEEDBACK
       btn.textContent = "Added ✓";
@@ -69,13 +69,15 @@ function renderProducts(items) {
 }
 
 // ---------------- CART ----------------
-function addToCart(id, name, price) {
-  const existing = cart.find(item => item.id === id);
+function addToCart(id, name, price, image) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existing = cart.find(i => i.id === id);
 
   if (existing) {
-    existing.qty += 1;
+    existing.qty++;
   } else {
-    cart.push({ id, name, price, qty: 1 });
+    cart.push({ id, name, price, image, qty: 1 }); // ✅ add image
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
