@@ -25,24 +25,38 @@ function renderProducts(items) {
     const card = document.createElement("div");
     card.className = "card";
 
+    // IMAGE
     const img = document.createElement("img");
-    img.src = item.image;
+    img.src = item.image || "https://via.placeholder.com/200";
+
     img.addEventListener("click", () => {
-        window.location.href = `./product.html?id=${item._id}`;
+      window.location.href = `./product.html?id=${item._id}`;
     });
 
+    // NAME
     const name = document.createElement("h3");
     name.textContent = item.name;
 
+    // PRICE
     const price = document.createElement("p");
     price.className = "price";
     price.textContent = `$${item.price}`;
 
+    // BUTTON
     const btn = document.createElement("button");
     btn.textContent = "Add to Cart";
 
     btn.addEventListener("click", () => {
-    addToCart(item._id, item.name, item.price);
+      addToCart(item._id, item.name, item.price);
+
+      // 🔥 UX FEEDBACK
+      btn.textContent = "Added ✓";
+      btn.style.background = "green";
+
+      setTimeout(() => {
+        btn.textContent = "Add to Cart";
+        btn.style.background = "black";
+      }, 1000);
     });
 
     card.appendChild(img);
