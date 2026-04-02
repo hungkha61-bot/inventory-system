@@ -1,9 +1,9 @@
 const API = "https://inventory-system-syzl.onrender.com/api";
 
 const productGrid = document.getElementById("productGrid");
-const cartBtn = document.getElementById("cartBtn");
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// ✅ REMOVE cartBtn (no longer needed)
+// const cartBtn = document.getElementById("cartBtn");
 
 // ---------------- LOAD PRODUCTS ----------------
 async function loadProducts() {
@@ -13,7 +13,7 @@ async function loadProducts() {
 
     renderProducts(data);
   } catch (err) {
-    console.error(err);
+    console.error("LOAD ERROR:", err);
   }
 }
 
@@ -28,6 +28,7 @@ function renderProducts(items) {
     // IMAGE
     const img = document.createElement("img");
     img.src = item.image || "https://via.placeholder.com/200";
+    img.style.cursor = "pointer";
 
     img.addEventListener("click", () => {
       window.location.href = `./product.html?id=${item._id}`;
@@ -49,7 +50,7 @@ function renderProducts(items) {
     btn.addEventListener("click", () => {
       addToCart(item._id, item.name, item.price, item.image);
 
-      // 🔥 UX FEEDBACK
+      // UX feedback
       btn.textContent = "Added ✓";
       btn.style.background = "green";
 
@@ -77,25 +78,16 @@ function addToCart(id, name, price, image) {
   if (existing) {
     existing.qty++;
   } else {
-    cart.push({ id, name, price, image, qty: 1 }); // ✅ add image
+    cart.push({ id, name, price, image, qty: 1 });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartUI();
 }
 
-function updateCartUI() {
-  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-  cartBtn.textContent = `Cart (${totalQty})`;
-}
-
-
+// ---------------- NAVIGATION ----------------
 function goToProduct(id) {
   window.location.href = `./product.html?id=${id}`;
 }
 
-window.addToCart = addToCart;
-
 // ---------------- INIT ----------------
-updateCartUI();
 loadProducts();
