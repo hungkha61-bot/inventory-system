@@ -14,3 +14,13 @@ if (logoutBtn) {
     window.location.href = "index.html";
   });
 }
+
+// ---------------- ACTIVE LINK ----------------
+const links = document.querySelectorAll(".navbar a");
+
+links.forEach(link => {
+  // compare pathname only (safer)
+  if (link.pathname === window.location.pathname) {
+    link.style.color = "#00d4ff";
+  }
+});
