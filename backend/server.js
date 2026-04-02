@@ -363,6 +363,34 @@ app.get("/api/orders", async (req, res) => {
   }
 });
 
+// =====================
+// UPDATE ORDER STATUS
+// =====================
+app.put("/api/orders/:id/status", async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (!["Pending", "Delivered"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json(order);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // ------------------- START SERVER -------------------
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

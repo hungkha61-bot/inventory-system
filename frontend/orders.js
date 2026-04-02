@@ -29,10 +29,46 @@ async function loadOrders() {
 
       div.innerHTML = `
         <h3>Order ID: ${order._id}</h3>
+        <p>Status: <strong class="status ${order.status}">${order.status}</strong></p>
         <ul>${itemsHTML}</ul>
         <p><strong>Total:</strong> $${order.total}</p>
         <small>${new Date(order.createdAt).toLocaleString()}</small>
-      `;
+        `;
+
+    if (order.status === "Pending") {
+  const btn = document.createElement("button");
+  btn.textContent = "Mark as Delivered";
+
+  btn.style.marginTop = "10px";
+
+  btn.onclick = async () => {
+    try {
+      const res = await fetch(`${API}/orders/${order._id}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ status: "Delivered" })
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        alert("Update failed: " + err);
+        return;
+      }
+
+      alert("Order marked as Delivered ✅");
+
+      // reload to update UI
+      location.reload();
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  div.appendChild(btn); // ⭐ ADD BUTTON TO CARD
+}
 
       container.appendChild(div);
     });

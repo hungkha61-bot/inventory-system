@@ -129,3 +129,17 @@ body {
   padding: 15px;
   border-radius: 10px;
 }
+
+.status {
+  padding: 4px 8px;
+  border-radius: 5px;
+  color: white;
+}
+
+.status.Pending {
+  background: orange;
+}
+
+.status.Delivered {
+  background: green;
+}
