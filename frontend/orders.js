@@ -1,29 +1,48 @@
 const API = "https://inventory-system-syzl.onrender.com/api";
 const token = localStorage.getItem("token");
-
-const container = document.getElementById("ordersContainer");
+const container = document.getElementById("orders");
 
 async function loadOrders() {
-  if (!token) {
-    container.innerHTML = "<p>Please login first 😢</p>";
-    return;
-  }
-
   try {
-    const res = await fetch(`${API}/orders/my`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
+    const res = await fetch(`${API}/orders`);
     const orders = await res.json();
 
-    renderOrders(orders);
+    if (!orders.length) {
+      container.innerHTML = "<p>No orders yet 😢</p>";
+      return;
+    }
+
+    orders.forEach(order => {
+      const div = document.createElement("div");
+      div.className = "order-card";
+
+      let itemsHTML = "";
+
+      order.items.forEach(i => {
+        itemsHTML += `
+          <li>
+            <img src="${i.image}" width="50">
+            ${i.name} x ${i.qty} = $${i.price * i.qty}
+          </li>
+        `;
+      });
+
+      div.innerHTML = `
+        <h3>Order ID: ${order._id}</h3>
+        <ul>${itemsHTML}</ul>
+        <p><strong>Total:</strong> $${order.total}</p>
+        <small>${new Date(order.createdAt).toLocaleString()}</small>
+      `;
+
+      container.appendChild(div);
+    });
 
   } catch (err) {
     console.error(err);
   }
 }
+
+loadOrders();
 
 function renderOrders(orders) {
   container.innerHTML = "";
