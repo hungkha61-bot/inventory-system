@@ -143,3 +143,36 @@ body {
 .status.Delivered {
   background: green;
 }
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar a {
+  color: white;
+  margin-right: 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  color: #00d4ff;
+}
+
+.navbar button {
+  background: crimson;
+  border: none;
+  padding: 6px 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.navbar button:hover {
+  background: darkred;
+}
