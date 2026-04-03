@@ -1,5 +1,8 @@
+const API = "https://inventory-system-syzl.onrender.com/api";
 
 // 🔒 Protect admin page
+const role = localStorage.getItem("role");
+const token = localStorage.getItem("token");
 
 if (role !== "admin") {
   window.location.href = "store.html";
