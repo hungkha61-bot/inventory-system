@@ -15,7 +15,7 @@ async function loadDashboard() {
       Authorization: `Bearer ${token}`
     };
 
-    const itemsRes = await fetch(`${API}/items`, { headers });
+    const itemsRes = await fetch(`${API}/public/items`, { headers });
     const items = await itemsRes.json();
 
     const ordersRes = await fetch(`${API}/orders`, { headers });
