@@ -1,6 +1,5 @@
 
 // 🔒 Protect admin page
-const token = localStorage.getItem("token");
 
 if (role !== "admin") {
   window.location.href = "store.html";
