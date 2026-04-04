@@ -10,13 +10,15 @@ async function loadNavbar() {
 
 // ---------------- INIT LOGIC ----------------
 function initNavbar() {
-  const role = localStorage.getItem("role");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  // ADMIN LINK CONTROL
-  const adminLink = document.getElementById("adminLink");
-  if (role !== "admin" && adminLink) {
-    adminLink.style.display = "none";
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "index.html";
+    });
   }
+}
 
   // LOGOUT
   const logoutBtn = document.getElementById("logoutBtn");
