@@ -5,8 +5,18 @@ const API = "https://inventory-system-syzl.onrender.com/api";
 const role = localStorage.getItem("role");
 const token = localStorage.getItem("token");
 
-if (role !== "admin") {
-  window.location.href = "store.html";
+if (!token) {
+  window.location.href = "index.html";
+  return;
+}
+
+const userRole = role ? role.toLowerCase() : "user";
+
+function applyRolePermissions() {
+  if (userRole !== "admin") {
+    const adminElements = document.querySelectorAll(".admin-only");
+    adminElements.forEach(el => el.style.display = "none");
+  }
 }
 
 async function loadDashboard() {
@@ -16,9 +26,11 @@ async function loadDashboard() {
     };
 
     const itemsRes = await fetch(`${API}/public/items`, { headers });
+    if (!itemsRes.ok) throw new Error(itemsRes.status);
     const items = await itemsRes.json();
 
     const ordersRes = await fetch(`${API}/orders`, { headers });
+    if (!ordersRes.ok) throw new Error(ordersRes.status);
     const orders = await ordersRes.json();
 
     document.getElementById("totalProducts").textContent = items.length;
@@ -35,6 +47,9 @@ async function loadDashboard() {
   }
 }
 
-loadDashboard();
+document.addEventListener("DOMContentLoaded", () => {
+  applyRolePermissions();
+  loadDashboard();
+});
 
 })();
