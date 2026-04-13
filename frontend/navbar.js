@@ -10,16 +10,23 @@ async function loadNavbar() {
 
 // ---------------- INIT LOGIC ----------------
 function initNavbar() {
-  const logoutBtn = document.getElementById("logoutBtn");
+  const role = localStorage.getItem("role");
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.clear();
-      window.location.href = "index.html";
-    });
+  // ADMIN LINK CONTROL
+  const adminLink = document.getElementById("adminLink");
+  if (role !== "admin" && adminLink) {
+    adminLink.style.display = "none";
   }
-}
 
+  // ---------------- GLOBAL CLICK HANDLER ----------------
+document.addEventListener("click", function (e) {
+  if (e.target && e.target.id === "logoutBtn") {
+    console.log("Logging out...");
+
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
+});
   // LOGOUT
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
