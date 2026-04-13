@@ -282,13 +282,19 @@ addBtn.addEventListener("click", async () => {
 
     const data = await res.json();
     imageUrl = data.secure_url;
-
-    console.log("Cloudinary URL:", imageUrl);
   }
 
-  // 🔥 Send to backend (NO multer anymore)
-  const res2 = await fetch(`${API}/items`, {
-    method: "POST",
+  // 🔥 Decide CREATE or UPDATE
+  let url = `${API}/items`;
+  let method = "POST";
+
+  if (currentEditId) {
+    url = `${API}/items/${currentEditId}`;
+    method = "PUT";
+  }
+
+  const res2 = await fetch(url, {
+    method,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
