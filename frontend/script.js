@@ -257,6 +257,7 @@ function renderItems(items) {
 
 addBtn.addEventListener("click", async (e) => {
   e.preventDefault();
+
   if (!token) return alert("Login first!");
 
   const name = itemInput.value.trim();
@@ -265,24 +266,15 @@ addBtn.addEventListener("click", async (e) => {
 
   const imageFile = document.getElementById("itemImage").files[0];
 
-  let imageUrl = null;
+  // ✅ DEFINE ONCE (GLOBAL IN FUNCTION)
+  const formData = new FormData();
 
-  // 🔥 Upload to Cloudinary FIRST
+  formData.append("name", name);
+  formData.append("price", price);
+  formData.append("quantity", quantity);
+
   if (imageFile) {
-    const formData = new FormData();
-    formData.append("file", imageFile);
-    formData.append("upload_preset", "inventory_upload");
-
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dm1n8bthw/image/upload",
-      {
-        method: "POST",
-        body: formData
-      }
-    );
-
-    const data = await res.json();
-    imageUrl = data.secure_url;
+    formData.append("image", imageFile); // 👈 THIS feeds req.file
   }
 
   // 🔥 Decide CREATE or UPDATE
@@ -294,17 +286,18 @@ addBtn.addEventListener("click", async (e) => {
     method = "PUT";
   }
 
-  const res2 = await fetch(url, {
-  method,
-  headers: {
-    Authorization: `Bearer ${token}`
-  },
-  body: formData
-});
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: formData
+  });
 
-  const result = await res2.json();
+  const result = await res.json();
   console.log(result);
 
+  
       // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
     itemPrice.value = "";
