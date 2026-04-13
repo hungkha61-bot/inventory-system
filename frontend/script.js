@@ -255,7 +255,7 @@ function renderItems(items) {
 
 // ------------------- ADD / UPDATE -------------------
 
-addBtn.addEventListener("click", async () => {
+addBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   if (!token) return alert("Login first!");
 
