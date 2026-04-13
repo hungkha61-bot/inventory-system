@@ -295,18 +295,12 @@ addBtn.addEventListener("click", async (e) => {
   }
 
   const res2 = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      name,
-      price,
-      quantity,
-      image: imageUrl
-    })
-  });
+  method,
+  headers: {
+    Authorization: `Bearer ${token}`
+  },
+  body: formData
+});
 
   const result = await res2.json();
   console.log(result);
