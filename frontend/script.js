@@ -255,9 +255,7 @@ function renderItems(items) {
 
 // ------------------- ADD / UPDATE -------------------
 
-addBtn.addEventListener("click", async (e) => {
-  e.preventDefault();
-
+addBtn.addEventListener("click", async () => {
   if (!token) return alert("Login first!");
 
   const name = itemInput.value.trim();
@@ -266,38 +264,46 @@ addBtn.addEventListener("click", async (e) => {
 
   const imageFile = document.getElementById("itemImage").files[0];
 
-  // ✅ DEFINE ONCE (GLOBAL IN FUNCTION)
-  const formData = new FormData();
+  let imageUrl = null;
 
-  formData.append("name", name);
-  formData.append("price", price);
-  formData.append("quantity", quantity);
-
+  // 🔥 Upload to Cloudinary FIRST
   if (imageFile) {
-    formData.append("image", imageFile); // 👈 THIS feeds req.file
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("upload_preset", "inventory_upload");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dm1n8bthw/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await res.json();
+    imageUrl = data.secure_url;
+
+    console.log("Cloudinary URL:", imageUrl);
   }
 
-  // 🔥 Decide CREATE or UPDATE
-  let url = `${API}/items`;
-  let method = "POST";
-
-  if (currentEditId) {
-    url = `${API}/items/${currentEditId}`;
-    method = "PUT";
-  }
-
-  const res = await fetch(url, {
-    method,
+  // 🔥 Send to backend (NO multer anymore)
+  const res2 = await fetch(`${API}/items`, {
+    method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: formData
+    body: JSON.stringify({
+      name,
+      price,
+      quantity,
+      image: imageUrl
+    })
   });
 
-  const result = await res.json();
+  const result = await res2.json();
   console.log(result);
 
-  
       // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
     itemPrice.value = "";
