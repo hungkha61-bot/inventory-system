@@ -286,24 +286,6 @@ addBtn.addEventListener("click", async () => {
     console.log("Cloudinary URL:", imageUrl);
   }
 
-  // 🔥 Send to backend (NO multer anymore)
-  const res2 = await fetch(`${API}/items`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      name,
-      price,
-      quantity,
-      image: imageUrl
-    })
-  });
-
-  const result = await res2.json();
-  console.log(result);
-
       // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
     itemPrice.value = "";
