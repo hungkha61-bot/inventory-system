@@ -133,9 +133,10 @@ async function loadStats() {
 
     const data = await res.json();
 
-    document.getElementById("totalItems").textContent = data.totalItems;
-    document.getElementById("totalQty").textContent = data.totalQty;
-    document.getElementById("totalValue").textContent = data.totalValue;
+    document.getElementById("totalProducts").textContent = data.totalItems;
+    document.getElementById("totalOrders").textContent = data.totalOrders || 0;
+    document.getElementById("totalRevenue").textContent = "$" + (data.totalValue || 0);
+    document.getElementById("lowStock").textContent = data.lowStock || 0;
 
   } catch (err) {
     console.error("Stats error:", err);
