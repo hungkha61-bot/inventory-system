@@ -6,6 +6,8 @@ let token = localStorage.getItem("token");
 let role = localStorage.getItem("role");
 let email = null;
 let currentEditId = null;
+let editingId = null;
+
 
 // ------------------- DOM READY -------------------
 document.addEventListener("DOMContentLoaded", () => {
