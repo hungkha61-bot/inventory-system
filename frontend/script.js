@@ -258,6 +258,41 @@ function renderItems(items) {
 
 // ------------------- ADD / UPDATE -------------------
 
+async function loadItems() {
+  try {
+    const res = await fetch(`${API}/public/items`);
+    const items = await res.json();
+
+    const list = document.getElementById("itemList");
+    list.innerHTML = "";
+
+    items.forEach(item => {
+      const li = document.createElement("li");
+
+      li.innerHTML = `
+        <div class="item-card">
+          <div class="item-left">
+            <img src="${item.image || ''}" />
+            <div class="item-info">
+              <strong>${item.name}</strong><br/>
+              <small>Price: $${item.price} | Qty: ${item.quantity}</small>
+            </div>
+          </div>
+
+          <div class="item-actions">
+            <button onclick='editItem(${JSON.stringify(item)})'>Edit</button>
+          </div>
+        </div>
+      `;
+
+      list.appendChild(li);
+    });
+
+  } catch (err) {
+    console.error("Load items error:", err);
+  }
+}
+
 addBtn.addEventListener("click", async () => {
   if (!token) return alert("Login first!");
 
@@ -331,11 +366,10 @@ addBtn.addEventListener("click", async () => {
     loadItems();
 
   } catch (err) {
-    console.error(err);
     alert("Error saving item");
   }
 
-
+  
       // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";
     itemPrice.value = "";
