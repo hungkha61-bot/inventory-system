@@ -331,7 +331,7 @@ addBtn.addEventListener("click", async () => {
     loadItems();
 
   } catch (err) {
-    console.error(err);
+    console.error("LOAD ERROR:", err);
     alert("Error saving item");
   }
 
