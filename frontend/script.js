@@ -261,30 +261,77 @@ addBtn.addEventListener("click", async () => {
   const name = itemInput.value.trim();
   const price = itemPrice.value;
   const quantity = itemQty.value;
-
   const imageFile = document.getElementById("itemImage").files[0];
+
+  if (!name) return alert("Name is required!");
 
   let imageUrl = null;
 
-  // 🔥 Upload to Cloudinary FIRST
-  if (imageFile) {
-    const formData = new FormData();
-    formData.append("file", imageFile);
-    formData.append("upload_preset", "inventory_upload");
+  try {
+    // 🔥 1. Upload image to Cloudinary (if selected)
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      formData.append("upload_preset", "inventory_upload");
 
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dm1n8bthw/image/upload",
-      {
-        method: "POST",
-        body: formData
-      }
-    );
+      const uploadRes = await fetch(
+        "https://api.cloudinary.com/v1_1/dm1n8bthw/image/upload",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const uploadData = await uploadRes.json();
+      imageUrl = uploadData.secure_url;
+
+      console.log("Cloudinary URL:", imageUrl);
+    }
+
+    // 🔥 2. Decide create or update
+    const method = editingId ? "PUT" : "POST";
+    const url = editingId
+      ? `${API}/items/${editingId}`
+      : `${API}/items`;
+
+    // 🔥 3. Send data to backend
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name,
+        price,
+        quantity,
+        image: imageUrl // ✅ send Cloudinary URL
+      })
+    });
+
+    if (!res.ok) throw new Error("Failed to save item");
 
     const data = await res.json();
-    imageUrl = data.secure_url;
 
-    console.log("Cloudinary URL:", imageUrl);
+    console.log("Saved item:", data);
+
+    // 🔥 4. Reset form
+    itemInput.value = "";
+    itemPrice.value = "";
+    itemQty.value = "";
+    document.getElementById("itemImage").value = "";
+    previewImage.style.display = "none";
+
+    editingId = null;
+
+    // 🔥 5. Reload items list
+    loadItems();
+
+  } catch (err) {
+    console.error(err);
+    alert("Error saving item");
   }
+
 
       // ✅ RESET FORM (THIS IS WHAT YOU NEED)
     itemInput.value = "";

@@ -5,10 +5,11 @@ const API = "https://inventory-system-syzl.onrender.com/api";
 const role = localStorage.getItem("role");
 const token = localStorage.getItem("token");
 
-if (!token) {
-  window.location.href = "index.html";
-  return;
-}
+// ❌ REMOVE redirect (this caused infinite loop)
+// if (!token) {
+//   window.location.href = "index.html";
+//   return;
+// }
 
 const userRole = role ? role.toLowerCase() : "user";
 
@@ -25,12 +26,11 @@ async function loadDashboard() {
       Authorization: `Bearer ${token}`
     };
 
+    // 🔹 KEEP EXACTLY AS YOUR ORIGINAL
     const itemsRes = await fetch(`${API}/public/items`, { headers });
-    if (!itemsRes.ok) throw new Error(itemsRes.status);
     const items = await itemsRes.json();
 
     const ordersRes = await fetch(`${API}/orders`, { headers });
-    if (!ordersRes.ok) throw new Error(ordersRes.status);
     const orders = await ordersRes.json();
 
     document.getElementById("totalProducts").textContent = items.length;
@@ -49,7 +49,7 @@ async function loadDashboard() {
 
 document.addEventListener("DOMContentLoaded", () => {
   applyRolePermissions();
-  loadDashboard();
+  loadDashboard(); // ✅ ALWAYS RUN (like original)
 });
 
 })();

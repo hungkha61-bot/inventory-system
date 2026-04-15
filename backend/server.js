@@ -121,7 +121,6 @@ app.post("/api/items", authMiddleware, async (req, res) => {
     });
 
     await newItem.save();
-
     res.json(newItem);
 
   } catch (err) {
@@ -130,9 +129,9 @@ app.post("/api/items", authMiddleware, async (req, res) => {
 });
 
 // Update item
-app.put("/api/items/:id", authMiddleware, upload.single("image"), async (req, res) => {
+app.put("/api/items/:id", authMiddleware, async (req, res) => {
   try {
-    const { name, price, quantity } = req.body || {};
+    const { name, price, quantity, image } = req.body;
 
     const updateData = {
       name,
@@ -140,20 +139,22 @@ app.put("/api/items/:id", authMiddleware, upload.single("image"), async (req, re
       quantity
     };
 
-    if (req.file) {
-      updateData.image = req.file.path;
+    if (image) {
+      updateData.image = image; // ✅ use Cloudinary URL
     }
 
     const item = await Item.findById(req.params.id);
-
     if (!item) return res.status(404).json({ message: "Item not found" });
 
-    // 🔐 Ownership check
     if (req.user.role !== "admin" && item.createdBy !== req.user.email) {
       return res.status(403).json({ message: "Not authorized" });
     }
 
-    const updated = await Item.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const updated = await Item.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
 
     res.json(updated);
 
@@ -389,6 +390,10 @@ app.put("/api/orders/:id/status", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+app.get("/api/test", (req, res) => {
+  res.json({ message: "API is working!" });
 });
 
 // ------------------- START SERVER -------------------

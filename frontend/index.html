@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Inventory System</title>
+
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     input, select, button { margin: 4px; padding: 6px; }
@@ -23,103 +24,102 @@
       background: #2980b9;
     }
 
-/* CARD */
-.item-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  margin-bottom: 12px;
-  background: #fff;
-  transition: 0.2s;
-}
+    /* CARD */
+    .item-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
+      background: #fff;
+      transition: 0.2s;
+    }
 
-.item-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
-}
+    .item-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
 
-/* LEFT */
-.item-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.item-left img {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  object-fit: cover;
-}
+    .item-left img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
 
-/* INFO */
-.item-info strong {
-  font-size: 16px;
-}
+    .item-info strong {
+      font-size: 16px;
+    }
 
-.item-info small {
-  color: gray;
-}
+    .item-info small {
+      color: gray;
+    }
 
-/* RIGHT BUTTONS */
-.item-actions {
-  display: flex;
-  gap: 6px;
-}
+    .item-actions {
+      display: flex;
+      gap: 6px;
+    }
 
-/* BUTTON STYLE */
-.btn {
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
+    .btn {
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
 
-/* COLORS */
-.btn-edit {
-  background: #4CAF50;
-  color: white;
-}
+    .btn-edit { background: #4CAF50; color: white; }
+    .btn-delete { background: #f44336; color: white; }
 
-.btn-delete {
-  background: #f44336;
-  color: white;
-}
+    .btn:hover { opacity: 0.85; }
 
-.btn:hover {
-  opacity: 0.85;
-}
+    .low-stock {
+      background: #ffe5e5;
+      border: 1px solid #ffb3b3;
+    }
 
-/* LOW STOCK */
-.low-stock {
-  background: #ffe5e5;
-  border: 1px solid #ffb3b3;
-}
+    #formRow input { padding: 6px; }
+    #formRow button { padding: 6px 10px; }
 
-#formRow input {
-  padding: 6px;
-}
+    /* DASHBOARD CARDS */
+    .dashboard {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
 
-#formRow button {
-  padding: 6px 10px;
-}
-</style>
-
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      width: 180px;
+      text-align: center;
+      background: #f9f9f9;
+    }
+  </style>
 </head>
+
 <body>
 
 <div id="navbar"></div>
 
 <h2>Login</h2>
-<form id="loginForm">
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Password" required />
-  <button type="submit">Login</button>
-</form>
+<div id="loginSection">
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+</div>
 
 <p id="loginInfo"></p>
 <button id="logoutBtn" style="display:none;" type="button">Logout</button>
@@ -127,12 +127,8 @@
 <hr />
 
 <h2>Dashboard</h2>
-<div id="dashboard">
-  <p>Total Items: <strong id="totalItems">0</strong></p>
-  <p>Total Quantity: <strong id="totalQty">0</strong></p>
-  <p>Total Value: <strong id="totalValue">0</strong></p>
-</div>
 
+<!-- ✅ ONLY ONE DASHBOARD (FIXED) -->
 <div class="dashboard">
   <div class="card">
     <h3>Total Products</h3>
@@ -167,7 +163,6 @@
 
   <input type="file" id="itemImage" accept="image/*" />
 
-  <!-- Preview -->
   <img id="previewImage" 
        style="display:none; width:60px; height:60px; border-radius:6px; object-fit:cover;" />
 
@@ -186,12 +181,14 @@
 <hr />
 
 <h2>Search / Filter</h2>
+
 <input type="text" id="searchName" placeholder="Name" />
 <input type="text" id="searchByUser" placeholder="Created by (email)" />
 <input type="number" id="searchMinPrice" placeholder="Min Price" />
 <input type="number" id="searchMaxPrice" placeholder="Max Price" />
 <input type="number" id="searchMinQty" placeholder="Min Qty" />
 <input type="number" id="searchMaxQty" placeholder="Max Qty" />
+
 <button id="searchBtn" type="button">Search</button>
 <button id="exportBtn" type="button">Export CSV</button>
 
@@ -209,19 +206,23 @@
 <hr />
 
 <h2>Register New User (Admin Only)</h2>
-  <div id="registerSection" style = "display:none;">
-    <input type="text" id="regUsername" placeholder="Username" required />
-    <input type="email" id="regEmail" placeholder="Email" required />
-    <input type="password" id="regPassword" placeholder="Password" required />
-    <select id="regRole">
-      <option value="user">User</option>
-      <option value="admin">Admin</option>
-    </select>
-    <button id="regBtn" type="button">Register User</button>
-  </div>
 
-<script src="script.js"></script>
-<script src="admin.js"></script>
+<div id="registerSection">
+  <input type="text" id="regUsername" placeholder="Username" required />
+  <input type="email" id="regEmail" placeholder="Email" required />
+  <input type="password" id="regPassword" placeholder="Password" required />
+
+  <select id="regRole">
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <button id="regBtn" type="button">Register User</button>
+</div>
+
+<!-- ✅ SCRIPTS -->
+<script src="script.js" defer></script>
+<script src="admin.js" defer></script>
 
 </body>
 </html>
